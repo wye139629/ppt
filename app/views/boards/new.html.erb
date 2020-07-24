@@ -1,37 +1,38 @@
 <h1>新增看板</h1>
 
+<%# <form action="/boards" method="post"> %>
+    <%# <input type="text" name= "authenticity_token" value="<%= form_authenticity_token%>
+  <%# <label for="title">看板名稱</label> %>
+  <%# <input type="text" id='title' name="title"> %>
 
+  <%# <label for="intro">說明</label> %>
+  <%# <textarea name="intro" id="intro" cols="30" rows="10"></textarea> %>
 
-<form action="/boards" method="post">
-    <input type="text" name= "authenticity_token" value="<%= authenticity_token%>">
-  <label for="title">看板名稱</label>
-  <input type="text" id='title' name="title">
+  <%# <input type="submit" value="送出"> %>
 
-  <label for="intro">說明</label>
-  <textarea name="intro" id="intro" cols="30" rows="10"></textarea>
+<%# </form> %>
+  <% if @board.errors.any? %>
+  <ul>
+    <% @board.errors.full_messages.each do |message|%>
 
-  <input type="submit" value="送出">
+    <li><%= message %></li>
 
-</form>
-
-
-
-
-
-
-
+  <% end %>
+  </ul>
+  <% end %>
+ 
 
 
 <%= form_for(@board) do |f|%>
-  <div>
+  <div class="field">
     <%= f.label :title, '看板名稱'%>
     <%= f.text_field :title%>
   </div>
-  <div>
+  <div class="field">
     <%= f.label :intro, '看板資訊'%>
     <%= f.text_area :intro %>
   </div>
-  <div>
+  <div class="field">
     <%= f.label :state, '看板狀態'%>
     <%= f.text_field :state%>
   </div>

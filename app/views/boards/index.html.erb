@@ -18,7 +18,7 @@
     <tbody>
       <% @boards.each do |board| %>
         <tr>
-          <td><%= board.title %></td>
+          <td><%= link_to board.title, board_path(board.id) %></td>
           <td><%= board.intro %></td>
           <td><%= board.state %></td>
           <td>

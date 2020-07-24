@@ -1,0 +1,32 @@
+<h1>編輯看板</h1>
+
+ <% if @board.errors.any? %>
+  <ul>
+    <% @board.errors.full_messages.each do |message|%>
+
+    <li><%= message %></li>
+
+  <% end %>
+  </ul>
+  <% end %>
+
+
+
+<%= form_for(@board) do |f|%>
+  <div class= "field">
+    <%= f.label :title, '看板名稱'%>
+    <%= f.text_field :title%>
+  </div>
+  <div class= "field">
+    <%= f.label :intro, '看板資訊'%>
+    <%= f.text_area :intro %>
+  </div>
+  <div class= "field">
+    <%= f.label :state, '看板狀態'%>
+    <%= f.text_field :state%>
+  </div>
+
+  <%= f.submit '編輯看板'%>
+  <% end %>
+
+  <%= link_to '返回看板', boards_path%>
