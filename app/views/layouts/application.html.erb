@@ -10,9 +10,11 @@
   </head>
 
   <body>
-    <%= notice %>
+    
+    <%=render 'shared/frontend/navbar' %>
+    <%=render 'shared/common/errors'%>
     <%= yield %>
   
-    <footer>ppt 版權所有</footer>
+    <%=render 'shared/frontend/footer' %>
   </body>
 </html>

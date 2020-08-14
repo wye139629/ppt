@@ -9,11 +9,31 @@ Rails.application.routes.draw do
 
     # resources :posts, except: [:index, :new, :create]
 
+    
+
+
     resources :boards do
-        resources :posts , shallow: true
+        member do
+            post :favorite
+        end
+        resources :posts , shallow: true do
+            resources :comments, shallow: true, only:[:create]
+        end
     end
 
-    
+    resources :users, only: [:create] do
+        collection do
+            get :sign_up
+            get :edit
+            patch :update
+            get :sign_in
+            post :login
+            delete :sign_out
+        end
+    end
+
+    resources :favorites, only: [:index]
+    # except: [:show,:edit, :new, :create ]
     
     
 

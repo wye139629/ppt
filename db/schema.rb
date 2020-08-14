@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_30_041625) do
+ActiveRecord::Schema.define(version: 2020_08_10_031804) do
+
+  create_table "board_masters", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "board_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["board_id"], name: "index_board_masters_on_board_id"
+    t.index ["user_id"], name: "index_board_masters_on_user_id"
+  end
 
   create_table "boards", force: :cascade do |t|
     t.string "title"
@@ -22,6 +31,27 @@ ActiveRecord::Schema.define(version: 2020_07_30_041625) do
     t.index ["deleted_at"], name: "index_boards_on_deleted_at"
   end
 
+  create_table "comments", force: :cascade do |t|
+    t.string "content"
+    t.integer "post_id", null: false
+    t.integer "user_id", null: false
+    t.string "ip_address"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["post_id"], name: "index_comments_on_post_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "favorite_boards", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "board_id", null: false
+    t.integer "position"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["board_id"], name: "index_favorite_boards_on_board_id"
+    t.index ["user_id"], name: "index_favorite_boards_on_user_id"
+  end
+
   create_table "posts", force: :cascade do |t|
     t.string "title"
     t.text "content"
@@ -31,10 +61,33 @@ ActiveRecord::Schema.define(version: 2020_07_30_041625) do
     t.string "serial"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "user_id"
     t.index ["board_id"], name: "index_posts_on_board_id"
     t.index ["deleted_at"], name: "index_posts_on_deleted_at"
     t.index ["serial"], name: "index_posts_on_serial", unique: true
+    t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "account"
+    t.string "password"
+    t.string "email"
+    t.string "nickname"
+    t.string "gender"
+    t.string "state", default: "normal"
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["account"], name: "index_users_on_account", unique: true
+    t.index ["deleted_at"], name: "index_users_on_deleted_at"
+    t.index ["email"], name: "index_users_on_email", unique: true
+  end
+
+  add_foreign_key "board_masters", "boards"
+  add_foreign_key "board_masters", "users"
+  add_foreign_key "comments", "posts"
+  add_foreign_key "comments", "users"
+  add_foreign_key "favorite_boards", "boards"
+  add_foreign_key "favorite_boards", "users"
   add_foreign_key "posts", "boards"
 end

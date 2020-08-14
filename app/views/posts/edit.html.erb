@@ -1,0 +1,16 @@
+<h1>編輯文章</h1>
+
+<%= form_with(model: @post, local: true) do |f| %>
+  <div>
+    <%= f.label :title %>
+    <%= f.text_field :title%>
+  </div>
+
+  <div>
+    <%= f.label :content %>
+    <%= f.text_area :content %>
+  </div>
+
+  <%= f.submit%>
+
+<% end %>

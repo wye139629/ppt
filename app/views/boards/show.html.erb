@@ -1,4 +1,22 @@
-<h1><%= @board.title %>看板</h1>
+<h1 data-controller='heart' data-heart-board= "<%= @board.id %>">
+  <%= @board.title %>看板
+  <%# <%= link_to '我的最愛', favorite_board_path(@board), method: 'post'  %>
+  <button data-action='click->heart#favorite'>
+  <% if @board.favorited_by?(current_user) %>
+    <i class="fas fa-heart" data-target='heart.heart'></i>
+  <% else %>
+    <i class="far fa-heart" data-target='heart.heart'></i>
+  <% end %>
+  </button>
+</h1>
+
+
+
+<h3>
+  [版主:<%= display_bm(@board) %>]
+</h3>
+
+
 <%= link_to "新增文章", new_board_post_path(@board) %>
 
 
@@ -7,15 +25,18 @@
   <thead>
     <tr>
       <td>No.</td>
+      <td>作者</td>
       <td>Title</td>
     </tr>
   </thead>
   <tbody>
       <% a = 1%>
-      <% @board.posts.each do |post|%>
+      <% @posts.each do |post|%>
         <tr>
           <td><%= a %></td>
-          <td><%= link_to post.title,'#' %></td>
+          <td><%= post.display_username %></td>
+          <td><%= link_to post.title ,post_path(post) %></td>
+          <td><%= link_to '編輯', edit_post_path(post) %></td>
         </tr>
         <% a += 1%>
       <% end %>
