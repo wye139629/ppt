@@ -3,16 +3,16 @@ class BoardsController < ApplicationController
   before_action :authenticate_user, except: [:index, :show]
 
   def index
-    @boards = Board.where(deleted_at: nil)
+    @boards = Board.normal.page(params[:page]).per(2)
   end
 
   def show
-      @board = Board.find(params[:id]) 
+      @board = Board.noraml.find(params[:id]) 
       @posts = @board.posts.includes(:user) 
   end
 
   def favorite
-    @board = Board.find(params[:id]) 
+    @board = Board.normal.find(params[:id]) 
     # current_user.favorite_boards << @board
     current_user.toggle_favorite(@board)
 
@@ -44,11 +44,11 @@ class BoardsController < ApplicationController
   end
 
   def edit
-    @board = Board.find_by(id: params[:id])
+    @board = Board.normal.find_by(id: params[:id])
   end
 
   def update
-    @board = Board.find_by(id: params[:id])
+    @board = Board.normal.find_by(id: params[:id])
     if @board.update(params_board)
       redirect_to boards_path, notice: "更新成功"
     else
@@ -57,12 +57,19 @@ class BoardsController < ApplicationController
   end
 
   def destroy
-    @board = Board.find_by(id: params[:id])
+    @board = Board.normal.find_by(id: params[:id])
     # @board.destroy
     @board.update(deleted_at: Time.now)
     redirect_to boards_path , notice: "刪除成功"
     
   end
+
+  def hide
+    @board= Board.normal.find_by(id: params[:id])
+    @board.hide! if @board.may_hide?
+    redirect_to boards_path, notice: '看版已隱藏'
+  end
+
 
   private
   def params_board

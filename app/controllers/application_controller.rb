@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
+  include Pundit
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
   
+
   helper_method :user_sign_in?, :current_user 
   # before_action :find_user
 

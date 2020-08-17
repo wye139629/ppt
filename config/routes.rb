@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     resources :boards do
         member do
             post :favorite
+            put :hide
         end
         resources :posts , shallow: true do
             resources :comments, shallow: true, only:[:create]
