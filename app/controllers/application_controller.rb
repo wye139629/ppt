@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   include Pundit
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
+  rescue_from Pundit::NotAuthorizedError, with: :not_authorize
   
 
   helper_method :user_sign_in?, :current_user 
@@ -12,6 +13,12 @@ class ApplicationController < ActionController::Base
   #     @current_user = User.find(session[:user_token])
   #   end
   # end
+  
+  def not_authorize
+    redirect_to root_path, notice: '權限不足'
+  end
+  
+
 
   def user_sign_in?
     current_user != nil

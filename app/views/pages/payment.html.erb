@@ -1,0 +1,37 @@
+<h1>方案<%= @plan.upcase %></h1>
+<h3>價錢<%= @price %></h3>
+
+ <script src="https://js.braintreegateway.com/web/dropin/1.23.0/js/dropin.min.js"></script>
+
+
+
+  <%= form_with(url: "/checkout?plan=#{@plan}", id: 'payment_form' ,method: 'post', local: true) do %>
+    <div id="dropin-container"></div>
+    <button id="submit-button">付款</button>
+    <input type="hidden" value="" id='nonce' name='nonce'>
+  <% end %>
+
+
+  <script>
+    var button = document.querySelector('#submit-button');
+
+    braintree.dropin.create({
+      authorization: '<%= @token %>',
+      container: '#dropin-container'
+    }, function (createErr, instance) {
+      button.addEventListener('click', function (e) {
+        console.log(e)
+        e.preventDefault();
+        instance.requestPaymentMethod(function (err, payload) {
+          // console.log(payload)
+          const form = document.querySelector('#payment_form')
+          const input = document.querySelector('#nonce')
+          console.log(input.value)
+          input.value = payload.nonce
+          console.log(input.value)
+          form.submit()
+          // Submit payload.nonce to your server
+        });
+      });
+    });
+  </script>

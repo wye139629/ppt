@@ -8,20 +8,27 @@ class BoardPolicy < ApplicationPolicy
   end
   
   def create?
-    plan_a_user || plan_b_user || admin
+    if plan_a_user
+      user.boards.count < 2
+    elsif plan_b_user || admin
+      true
+    else
+      false
+    end
+    
   end
 
   private
   def plan_a_user
-    user.role == 'plan_a'
+    user && user.role == 'plan_a'
   end
   
   def plan_b_user
-    user.role == 'plan_b'
+    user &&　user.role == 'plan_b'
   end
 
   def admin
-    user.role == 'admin'
+    user && user.role == 'admin'
   end
   
   

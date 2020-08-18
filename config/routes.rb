@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
     root "pages#index"
     get "/about", to: "pages#about"
+    get "/pricing", to: "pages#pricing"
+    get "/payment", to: 'pages#payment'
+    post "/checkout", to: 'pages#checkout'
    
 
 

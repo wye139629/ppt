@@ -28,6 +28,7 @@ class BoardsController < ApplicationController
   def new
     if user_sign_in?
       @board = Board.new
+      authorize @board, :new?
     else
       redirect_to root_path, notice: '請先登入'
     end
@@ -36,6 +37,8 @@ class BoardsController < ApplicationController
   def create
     # render html: params
     @board = Board.new(params_board)
+    @board.users << current_user
+    authorize @board, :create?
     if @board.save
       redirect_to boards_path, notice: "新增成功"
     else
